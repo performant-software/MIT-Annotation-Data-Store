@@ -1,0 +1,30 @@
+{
+  "name": "MIT-Annotation-Data-Store",
+  "description": "Annotations API and Data Store App",
+  "scripts": {
+  },
+  "env": {
+    "CONSUMER": {
+      "required": true
+    },
+    "SECRET": {
+      "required": true
+    },
+    "PORT": {
+      "required": true
+    },
+    "API_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "mongolab"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
