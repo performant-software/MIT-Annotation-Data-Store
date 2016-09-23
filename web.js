@@ -7,6 +7,7 @@ var application_root = __dirname,
     version = process.env.VERSION,
     path = require("path"),
     mongoose = require('mongoose'),
+    _ = require('lodash'),
     lessMiddleware = require('less-middleware'),
     jwt = require('jwt-simple'),
     express = require("express"),
@@ -289,6 +290,35 @@ app.get('/api/annotations/:id', tokenOK, function(req, res) {
             return console.log(err);
         }
     });
+});
+
+
+// Pluck all values for a single field from all annotations on a document
+// TODO: Rethink name of this endpoint. Should probably be /api/fields/:field_name
+app.get('/api/field', function(req, res) {
+  var query;
+  // Which document to consider
+  var doc = req.query.uri.replace(/\/$/, '');
+  // Which field to pluck
+  var queryField = req.query.field;
+  var queryFields = queryField + ' -_id';
+  query = AnnotationModel.find({'uri': doc }, queryFields, function (err, docs) { });
+
+
+  query.exec(function(err, resultFields) {
+    if (!err) {
+      var lists = _.map(resultFields, function(resultField){
+        return resultField[queryField];
+      });
+      var list = _.union(_.flatten(lists));
+      var filterList = _.map(list, function(value){
+        return {'id': value, 'name': value};
+      });
+      return res.send({[queryField]: filterList});
+    } else {
+      return console.log(err);
+    }
+  });
 });
 
 // POST to CREATE
