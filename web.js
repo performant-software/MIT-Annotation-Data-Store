@@ -207,7 +207,13 @@ app.get('/api/search', tokenOK, function(req, res) {
             query.where('uri').equals(req.query.uri);
         }
         break;
+      case 'uuid':
+        query = AnnotationModel.find();
+        query.where('uuid').equals(req.query.uuid)
+        break;
     }
+
+    query.limit(req.query.limit);
 
     switch (req.query.mode) {
         case 'user':
@@ -221,6 +227,9 @@ app.get('/api/search', tokenOK, function(req, res) {
             query.where('groups'). in (req.query.groups);
             query.$where('this.permissions.read.length < 1');
             break;
+        case 'single':
+            query.limit(1);
+            break;
         case 'admin':
             break;
     }
@@ -232,9 +241,7 @@ app.get('/api/search', tokenOK, function(req, res) {
         query.where('annotation_categories'). in (req.query.annotation_categories);
     }
 
-    query.limit(req.query.limit);
-
-    if (req.query.sidebar || req.query.context == "dashboard" || req.query.context == "search") {
+    if (req.query.sidebar || req.query.context == "dashboard" || req.query.context == "search"  || req.query.context == "uuid") {
       query.exec(function(err, annotations) {
         if (!err) {
           if (annotations.length > 0) {
@@ -398,6 +405,8 @@ app.put('/api/annotations/:id', tokenOK, function(req, res) {
             if (!err) {
                 console.log("updated");
             } else {
+                console.log("error:");
+                console.log(req.body);
                 console.log(err);
             }
             return res.send(annotation);
