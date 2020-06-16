@@ -186,7 +186,7 @@ app.get('/api/search', tokenOK, function(req, res) {
     switch (req.query.context) {
       case 'document':
         query = AnnotationModel.find({
-          'uri': req.query.uri.replace(/\/$/, '')
+          'uri': {'$regex': '.*'+req.query.uri.replace(/(^\w+:|^)\/\//, '')+'.*'}
         });
         break;
       case 'dashboard':
