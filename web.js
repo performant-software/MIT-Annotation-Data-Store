@@ -185,7 +185,7 @@ app.get('/api/search', tokenOK, function(req, res) {
     var re = new RegExp(req.query.host, 'i');
     switch (req.query.context) {
       case 'document':
-        var doc_part = "/documents" + req.query.uri.split('documents')[1];
+        var doc_part = "/documents/" + req.query.uri.split('documents')[1];
         query = AnnotationModel.find({
           'uri': doc_part.replace(/\/$/, '')
         });
