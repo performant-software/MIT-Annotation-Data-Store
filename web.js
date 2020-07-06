@@ -457,6 +457,6 @@ function inWindow(decoded, next) {
 }
 
 // launch server
-app.listen(port || 5000, function() {
+app.listen(port, function() {
     console.log("Listening on " + port);
 });
