@@ -2,7 +2,8 @@
 var application_root = __dirname,
     secret = process.env.SECRET,
     port = process.env.PORT,
-    db = process.env.DB,
+    uri = process.env.DB_URI,
+    db = process.env.DB_NAME,
     consumer = process.env.CONSUMER,
     version = process.env.VERSION,
     path = require("path"),
@@ -149,7 +150,10 @@ var Annotation = new Schema({
 var AnnotationModel = mongoose.model('Annotation', Annotation);
 
 // DB
-mongoose.connect(db);
+// mongoose.connect(db);
+mongoose.connect(uri, {dbName: db});
+// mongodb+srv://heroku_pfm17c5t:<password>@cluster-pfm17c5t.vkody.mongodb.net/<dbname>?retryWrites=true&w=majority
+
 
 // config
 app.configure(function() {
@@ -213,7 +217,7 @@ app.get('/api/search', tokenOK, function(req, res) {
         break;
     }
 
-    query.limit(req.query.limit);
+    query.limit(parseInt(req.query.limit));
 
     switch (req.query.mode) {
         case 'user':

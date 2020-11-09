@@ -6,7 +6,7 @@
     "jwt-simple": "0.1.0",
     "less-middleware": "0.1.12",
     "lodash": "^4.16.1",
-    "mongoose": "4.1.9"
+    "mongoose": "^5.10.13"
   },
   "engines": {
     "node": "14.12.0",
