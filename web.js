@@ -235,6 +235,8 @@ app.get('/api/search', tokenOK, function(req, res) {
             query.limit(1);
             break;
         case 'admin':
+            const queryString = `this.permissions.read.length < 1 || this.permissions.read.includes("${req.query.user}")`;
+            query.$where(queryString);
             break;
     }
 
