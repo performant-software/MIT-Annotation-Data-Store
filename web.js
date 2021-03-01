@@ -222,6 +222,8 @@ app.get('/api/search', tokenOK, function(req, res) {
     switch (req.query.mode) {
         case 'user':
             query.where('user').equals(req.query.user);
+            const userQueryString = `this.permissions.read.length < 1 || this.permissions.read.includes("${req.query.currentUser || req.query.user}")`;
+            query.$where(userQueryString);
             break;
         case 'group':
             query.where('subgroups'). in (req.query.subgroups);
@@ -235,8 +237,8 @@ app.get('/api/search', tokenOK, function(req, res) {
             query.limit(1);
             break;
         case 'admin':
-            const queryString = `this.permissions.read.length < 1 || this.permissions.read.includes("${req.query.user}")`;
-            query.$where(queryString);
+            const adminQueryString = `this.permissions.read.length < 1 || this.permissions.read.includes("${req.query.user}")`;
+            query.$where(adminQueryString);
             break;
     }
 
